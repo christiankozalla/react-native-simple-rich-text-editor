@@ -1,12 +1,15 @@
-import { multiply } from 'react-native-simple-rich-text-editor';
-import { Text, View, StyleSheet } from 'react-native';
-
-const result = multiply(3, 7);
+import RichTextEditor from 'react-native-simple-rich-text-editor';
+import { View, StyleSheet } from 'react-native';
+import { useState } from 'react';
 
 export default function App() {
+  const [markdownText, setMarkdownText] = useState(
+    '# Hello World\nA paragraph.'
+  ); // or with backticks ``
+
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <RichTextEditor text={markdownText} onEmitText={setMarkdownText} />
     </View>
   );
 }
