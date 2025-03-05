@@ -17,6 +17,7 @@
       }
     }
   },
+  "types": "./lib/typescript/module/src/index.d.ts",
   "files": [
     "src",
     "lib",
@@ -42,6 +43,7 @@
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
+    "format": "prettier \"**/*.{ts,tsx,json}\" --write",
     "clean": "del-cli lib",
     "prepare": "bob build",
     "release": "release-it"
@@ -97,6 +99,9 @@
   "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
+    ],
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
