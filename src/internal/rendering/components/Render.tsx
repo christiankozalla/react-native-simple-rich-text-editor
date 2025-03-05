@@ -1,11 +1,13 @@
 import { Text } from 'react-native';
-import { intersperse } from '../utils';
-import { decode } from '../../text-formats/unicode-markers-format';
+import { intersperse } from '../utils.ts';
+import { decode } from '../../text-formats/unicode-markers-format/encode-decode.ts';
 import {
   ZWS,
+  HEADLINE_LEVELS,
   HEADLINE_MARKER_TYPE,
-} from '../../text-formats/unicode-markers-format';
-import { Headline } from './Headline';
+  MARKER_STRING_LENGTH,
+} from '../../text-formats/unicode-markers-format/constants.ts';
+import { Headline } from './Headline.tsx';
 
 /**
  * Renders the encoded text by splitting it on newlines.
@@ -19,14 +21,19 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
     lines.map((line, i) => {
       if (line.startsWith(ZWS)) {
         // Decode the entire line (marker + text).
-        const decodedBytes = decode(line);
+        const decodedBytes = decode(line.substring(0, MARKER_STRING_LENGTH));
 
         if (
           decodedBytes.length >= 2 &&
           decodedBytes[0] === HEADLINE_MARKER_TYPE
         ) {
           return (
-            <Headline key={i + line} level={decodedBytes[1]!}>
+            <Headline
+              key={i + line}
+              level={
+                decodedBytes[1] as (typeof HEADLINE_LEVELS)[keyof typeof HEADLINE_LEVELS]
+              }
+            >
               {line}
             </Headline>
           );

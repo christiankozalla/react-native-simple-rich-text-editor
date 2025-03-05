@@ -38,11 +38,9 @@ import {
   type NativeSyntheticEvent,
   type TextInputSelectionChangeEventData,
 } from 'react-native';
-import { Render } from './internal/rendering/components/Render';
-import {
-  addHeadlineMarker,
-  HEADLINE_LEVELS,
-} from './internal/text-formats/unicode-markers-format';
+import { Render } from './internal/rendering/components/Render.tsx';
+import { addHeadlineMarker } from './internal/text-formats/unicode-markers-format/text-manipulation.ts';
+import { Markers } from './internal/text-formats/unicode-markers-format/markers.ts';
 
 const RichTextEditor = ({
   text,
@@ -63,19 +61,19 @@ const RichTextEditor = ({
         <Button
           title="H1"
           onPress={() =>
-            addHeadlineMarker(HEADLINE_LEVELS.H1, onEmitText, selection)
+            onEmitText(addHeadlineMarker(Markers.H1, text, selection))
           }
         />
         <Button
           title="H2"
           onPress={() =>
-            addHeadlineMarker(HEADLINE_LEVELS.H2, onEmitText, selection)
+            onEmitText(addHeadlineMarker(Markers.H2, text, selection))
           }
         />
         <Button
           title="H3"
           onPress={() =>
-            addHeadlineMarker(HEADLINE_LEVELS.H3, onEmitText, selection)
+            onEmitText(addHeadlineMarker(Markers.H3, text, selection))
           }
         />
       </View>

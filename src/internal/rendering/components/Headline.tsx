@@ -1,11 +1,13 @@
 import { type PropsWithChildren } from 'react';
 import { type TextStyle, Text, StyleSheet } from 'react-native';
-import type { HEADLINE_LEVELS } from '../../text-formats/unicode-markers-format';
+import { HEADLINE_LEVELS } from '../../text-formats/unicode-markers-format/constants.ts';
 
 export const Headline = ({
   level,
   children,
-}: PropsWithChildren<{ level: HEADLINE_LEVELS }>) => {
+}: PropsWithChildren<{
+  level: (typeof HEADLINE_LEVELS)[keyof typeof HEADLINE_LEVELS];
+}>) => {
   return (
     <Text style={(styles[level] as TextStyle) ?? styles[3]}>{children}</Text>
   );

@@ -12,11 +12,7 @@ npm install react-native-simple-rich-text-editor
 
 
 ```js
-import { multiply } from 'react-native-simple-rich-text-editor';
-
-// ...
-
-const result = await multiply(3, 7);
+// TODO
 ```
 
 
