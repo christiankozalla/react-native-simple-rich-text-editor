@@ -1,3 +1,5 @@
+import { Markers } from './markers';
+
 /**
  * Inserts a headline start marker into the text at the current cursor position.
  * The marker encodes two bytes:
@@ -15,8 +17,7 @@ const addHeadlineMarker = (
     return marker;
   }
   // Split text at the current selection.
-  const before = text.substring(0, selection.start);
-  const after = text.substring(selection.end);
+  const { before, after } = splitBySelection(text, selection);
 
   // Do not add multiple consecutive markers, ZWS is the basis of each marker
   // if (before.endsWith(ZWS) || after.startsWith(ZWS)) {
@@ -33,4 +34,29 @@ const addHeadlineMarker = (
   return before + insertion + after;
 };
 
-export { addHeadlineMarker };
+const addBoldMarkers = (
+  text: string,
+  selection: { start: number; end: number }
+) => {
+  if (!text) {
+    // return only start marker? When will the end marker needs to be added?
+    return Markers.BOLD_START;
+  }
+
+  const { before, selected, after } = splitBySelection(text, selection);
+
+  return before + Markers.BOLD_START + selected + Markers.BOLD_END + after;
+};
+
+function splitBySelection(
+  text: string,
+  selection: { start: number; end: number }
+): { before: string; selected: string; after: string } {
+  return {
+    before: text.substring(0, selection.start),
+    selected: text.substring(selection.start, selection.end),
+    after: text.substring(selection.end),
+  };
+}
+
+export { addHeadlineMarker, addBoldMarkers, splitBySelection };

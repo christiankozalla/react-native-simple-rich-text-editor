@@ -2,7 +2,7 @@ import {
   HEADLINE_LEVELS,
   HEADLINE_MARKER_TYPE,
   ZWS,
-  MARKER_STRING_LENGTH,
+  MARKER_BYTE_LENGTH,
 } from './unicode-markers-format/constants.ts';
 import { decode } from './unicode-markers-format/encode-decode.ts';
 
@@ -33,9 +33,9 @@ const convertInternalFormatToMarkdown = (
 
     if (char === ZWS) {
       markdownText += decodedTokenToMarkdownToken(
-        decode(internalText.substring(i, i + MARKER_STRING_LENGTH))
+        decode(internalText.substring(i, i + MARKER_BYTE_LENGTH))
       );
-      i += MARKER_STRING_LENGTH;
+      i += MARKER_BYTE_LENGTH;
     } else {
       markdownText += char;
       i++;

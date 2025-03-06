@@ -17,6 +17,15 @@ const HEADLINE_MARKERS: Record<keyof typeof HEADLINE_LEVELS, Uint8Array> = {
   H3: createMarker([HEADLINE_MARKER_TYPE, HEADLINE_LEVELS.H3]),
 } as const;
 
+const BOLD_MARKER_TYPE = 0x20;
+const BOLD_MARKER_START = 1;
+const BOLD_MARKER_END = 2;
+
+const BOLD_MARKERS = {
+  START: createMarker([BOLD_MARKER_TYPE, BOLD_MARKER_START]),
+  END: createMarker([BOLD_MARKER_TYPE, BOLD_MARKER_END]),
+} as const;
+
 function createMarker(data: number[], length = MARKER_BYTE_LENGTH) {
   const array = new Uint8Array(length);
   array.set(data);
@@ -26,7 +35,10 @@ function createMarker(data: number[], length = MARKER_BYTE_LENGTH) {
 export {
   ZWS,
   MARKER_STRING_LENGTH,
+  MARKER_BYTE_LENGTH,
   HEADLINE_MARKER_TYPE,
   HEADLINE_LEVELS,
   HEADLINE_MARKERS,
+  BOLD_MARKER_TYPE,
+  BOLD_MARKERS,
 };
