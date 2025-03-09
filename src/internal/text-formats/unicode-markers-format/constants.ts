@@ -26,6 +26,15 @@ const BOLD_MARKERS = {
   END: createMarker([BOLD_MARKER_TYPE, BOLD_MARKER_END]),
 } as const;
 
+const ITALIC_MARKER_TYPE = 0x30;
+const ITALIC_MARKER_START = 3;
+const ITALIC_MARKER_END = 4;
+
+const ITALIC_MARKERS = {
+  START: createMarker([ITALIC_MARKER_TYPE, ITALIC_MARKER_START]),
+  END: createMarker([ITALIC_MARKER_TYPE, ITALIC_MARKER_END]),
+} as const;
+
 function createMarker(data: number[], length = MARKER_BYTE_LENGTH) {
   const array = new Uint8Array(length);
   array.set(data);
@@ -41,6 +50,5 @@ export {
   HEADLINE_MARKERS,
   BOLD_MARKER_TYPE,
   BOLD_MARKERS,
-  BOLD_MARKER_START,
-  BOLD_MARKER_END,
+  ITALIC_MARKERS,
 };

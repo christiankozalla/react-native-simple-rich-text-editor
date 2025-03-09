@@ -41,8 +41,8 @@ import {
 } from 'react-native';
 import { Render } from './internal/rendering/components/Render.tsx';
 import {
-  addBoldMarkers,
-  addBoldEndMarker,
+  addFontStyleMarkers,
+  addFontStyleEndMarker,
   addHeadlineMarker,
 } from './internal/text-formats/unicode-markers-format/text-manipulation.ts';
 import { Markers } from './internal/text-formats/unicode-markers-format/markers.ts';
@@ -60,6 +60,22 @@ const RichTextEditor = ({
     end: 0,
   });
   const [needsBoldEndMarker, setNeedsBoldEndMarker] = useState(false); // we must count the BOLD_START and BOLD_END markers in text prop => inital state
+  const [needsItalicEndMarker, setNeedsItalicEndMarker] = useState(false);
+
+  const handleFontStyleMarkerInsertion = (style: 'bold' | 'italic') => () => {
+    const isBold = style === 'bold';
+    if (isBold ? needsBoldEndMarker : needsItalicEndMarker) {
+      const { text: newText } = addFontStyleEndMarker(text, selection, style);
+      isBold ? setNeedsBoldEndMarker(false) : setNeedsItalicEndMarker(false);
+      onEmitText(newText);
+    } else {
+      const { text: newText } = addFontStyleMarkers(text, selection, style);
+      // this is a reaction to an implementation detail of addBoldMarkers - TODO: solve it cleanly
+      if (selection.start - selection.end === 0)
+        isBold ? setNeedsBoldEndMarker(true) : setNeedsItalicEndMarker(true);
+      onEmitText(newText);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -90,22 +106,18 @@ const RichTextEditor = ({
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.fixedWidth]}
-          onPress={() => {
-            if (needsBoldEndMarker) {
-              const { text: newText } = addBoldEndMarker(text, selection);
-              setNeedsBoldEndMarker(false);
-              onEmitText(newText);
-            } else {
-              const { text: newText } = addBoldMarkers(text, selection);
-              // this is a reaction to an implementation detail of addBoldMarkers - TODO: solve it cleanly
-              if (selection.start - selection.end === 0)
-                setNeedsBoldEndMarker(true);
-              onEmitText(newText);
-            }
-          }}
+          onPress={handleFontStyleMarkerInsertion('bold')}
         >
           <Text style={styles.buttonText}>
             {needsBoldEndMarker ? 'Bold End' : 'Bold'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.fixedWidth]}
+          onPress={handleFontStyleMarkerInsertion('italic')}
+        >
+          <Text style={styles.buttonText}>
+            {needsItalicEndMarker ? 'Italic End' : 'Italic'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -137,8 +149,8 @@ const styles = StyleSheet.create({
   },
   input: { flex: 1, textAlignVertical: 'top' },
   button: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: electricBlueHex,

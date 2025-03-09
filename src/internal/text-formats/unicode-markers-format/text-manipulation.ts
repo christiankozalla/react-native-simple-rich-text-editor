@@ -34,38 +34,56 @@ const addHeadlineMarker = (
   return before + insertion + after;
 };
 
-const addBoldEndMarker = (
+const FontStyleMarkers: Record<
+  'bold' | 'italic',
+  { START: string; END: string }
+> = {
+  bold: {
+    START: Markers.BOLD_START,
+    END: Markers.BOLD_END,
+  },
+  italic: { START: Markers.ITALIC_START, END: Markers.ITALIC_END },
+};
+
+const addFontStyleEndMarker = (
   text: string,
-  selection: { start: number; end: number }
+  selection: { start: number; end: number },
+  style: 'bold' | 'italic'
 ) => {
   const { before, selected, after } = splitBySelection(text, selection);
   return {
-    text: before + selected + Markers.BOLD_END + after,
+    text: before + selected + FontStyleMarkers[style].END + after,
     selection,
   };
 };
 
-const addBoldMarkers = (
+const addFontStyleMarkers = (
   text: string,
-  selection: { start: number; end: number }
+  selection: { start: number; end: number },
+  style: 'bold' | 'italic'
 ) => {
   const { before, selected, after } = splitBySelection(text, selection);
 
   // effectively no selection
   if (selection.end - selection.start === 0) {
     let prefix = '';
-    if (!before.endsWith(' ')) {
+    if (!before.endsWith('\n') && !before.endsWith(' ')) {
       prefix += ' ';
     }
 
     return {
-      text: before + prefix + Markers.BOLD_START,
+      text: before + prefix + FontStyleMarkers[style].START,
       selection,
     };
   }
 
   return {
-    text: before + Markers.BOLD_START + selected + Markers.BOLD_END + after,
+    text:
+      before +
+      FontStyleMarkers[style].START +
+      selected +
+      FontStyleMarkers[style].END +
+      after,
     selection,
   };
 };
@@ -83,7 +101,7 @@ function splitBySelection(
 
 export {
   addHeadlineMarker,
-  addBoldMarkers,
-  addBoldEndMarker,
+  addFontStyleMarkers,
+  addFontStyleEndMarker,
   splitBySelection,
 };

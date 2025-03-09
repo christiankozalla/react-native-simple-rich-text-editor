@@ -7,6 +7,7 @@ import { Headline } from './Headline.tsx';
 import { Bold } from './Bold.tsx';
 import { Markers } from '../../text-formats/unicode-markers-format/markers.ts';
 import { Fragment } from 'react/jsx-runtime';
+import { Italic } from './Italic.tsx';
 
 export const Render = ({ encodedText }: { encodedText: string }) => {
   const lines = splitPreservingSeparator(encodedText, ZWS);
@@ -31,6 +32,10 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
         // Because of the above: There must not be any other markers between Markers.BOLD_START and Markers.BOLD_END!
         return <Bold key={i + line}>{line}</Bold>;
       case Markers.BOLD_END:
+        break;
+      case Markers.ITALIC_START:
+        return <Italic key={i + line}>{line}</Italic>;
+      case Markers.ITALIC_END:
         break;
       default:
         // remove any broken markers
