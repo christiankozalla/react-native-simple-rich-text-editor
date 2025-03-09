@@ -1,12 +1,12 @@
 import { type PropsWithChildren } from 'react';
 import { type TextStyle, Text, StyleSheet } from 'react-native';
-import { HEADLINE_LEVELS } from '../../text-formats/unicode-markers-format/constants.ts';
+import { Markers } from '../../text-formats/unicode-markers-format/markers.ts';
 
 export const Headline = ({
   level,
   children,
 }: PropsWithChildren<{
-  level: (typeof HEADLINE_LEVELS)[keyof typeof HEADLINE_LEVELS];
+  level: keyof typeof styles;
 }>) => {
   return (
     <Text style={(styles[level] as TextStyle) ?? styles[3]}>{children}</Text>
@@ -14,17 +14,17 @@ export const Headline = ({
 };
 
 const styles = StyleSheet.create({
-  1: {
+  [Markers.H1]: {
     fontSize: 32,
     fontWeight: 'bold',
     marginVertical: 4,
   },
-  2: {
+  [Markers.H2]: {
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 4,
   },
-  3: {
+  [Markers.H3]: {
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 4,

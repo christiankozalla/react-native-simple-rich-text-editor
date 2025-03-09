@@ -31,15 +31,20 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
 import {
-  Button,
   StyleSheet,
   TextInput,
+  TouchableOpacity,
   View,
+  Text,
   type NativeSyntheticEvent,
   type TextInputSelectionChangeEventData,
 } from 'react-native';
 import { Render } from './internal/rendering/components/Render.tsx';
-import { addHeadlineMarker } from './internal/text-formats/unicode-markers-format/text-manipulation.ts';
+import {
+  addBoldMarkers,
+  addBoldEndMarker,
+  addHeadlineMarker,
+} from './internal/text-formats/unicode-markers-format/text-manipulation.ts';
 import { Markers } from './internal/text-formats/unicode-markers-format/markers.ts';
 
 const RichTextEditor = ({
@@ -54,31 +59,60 @@ const RichTextEditor = ({
     start: 0,
     end: 0,
   });
+  const [needsBoldEndMarker, setNeedsBoldEndMarker] = useState(false); // we must count the BOLD_START and BOLD_END markers in text prop => inital state
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Button
-          title="H1"
+        <TouchableOpacity
+          style={styles.button}
           onPress={() =>
             onEmitText(addHeadlineMarker(Markers.H1, text, selection))
           }
-        />
-        <Button
-          title="H2"
+        >
+          <Text style={styles.buttonText}>H1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
           onPress={() =>
             onEmitText(addHeadlineMarker(Markers.H2, text, selection))
           }
-        />
-        <Button
-          title="H3"
+        >
+          <Text style={styles.buttonText}>H2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
           onPress={() =>
             onEmitText(addHeadlineMarker(Markers.H3, text, selection))
           }
-        />
+        >
+          <Text style={styles.buttonText}>H3</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.fixedWidth]}
+          onPress={() => {
+            if (needsBoldEndMarker) {
+              const { text: newText } = addBoldEndMarker(text, selection);
+              setNeedsBoldEndMarker(false);
+              onEmitText(newText);
+            } else {
+              const { text: newText } = addBoldMarkers(text, selection);
+              // this is a reaction to an implementation detail of addBoldMarkers - TODO: solve it cleanly
+              if (selection.start - selection.end === 0)
+                setNeedsBoldEndMarker(true);
+              onEmitText(newText);
+            }
+          }}
+        >
+          <Text style={styles.buttonText}>
+            {needsBoldEndMarker ? 'Bold End' : 'Bold'}
+          </Text>
+        </TouchableOpacity>
       </View>
       <TextInput
         multiline
+        autoFocus
+        autoCorrect={false}
         style={styles.input}
         onSelectionChange={(
           e: NativeSyntheticEvent<TextInputSelectionChangeEventData>
@@ -91,14 +125,32 @@ const RichTextEditor = ({
   );
 };
 
+const electricBlueHex = '#009DDC';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   row: {
+    margin: 8,
     flexDirection: 'row',
+    gap: 8,
   },
   input: { flex: 1, textAlignVertical: 'top' },
+  button: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: electricBlueHex,
+    backgroundColor: 'white',
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: electricBlueHex,
+  },
+  fixedWidth: {
+    width: 100,
+  },
 });
 
 export default RichTextEditor;

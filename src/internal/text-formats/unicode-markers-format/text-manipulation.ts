@@ -34,18 +34,40 @@ const addHeadlineMarker = (
   return before + insertion + after;
 };
 
+const addBoldEndMarker = (
+  text: string,
+  selection: { start: number; end: number }
+) => {
+  const { before, selected, after } = splitBySelection(text, selection);
+  return {
+    text: before + selected + Markers.BOLD_END + after,
+    selection,
+  };
+};
+
 const addBoldMarkers = (
   text: string,
   selection: { start: number; end: number }
 ) => {
-  if (!text) {
-    // return only start marker? When will the end marker needs to be added?
-    return Markers.BOLD_START;
-  }
-
   const { before, selected, after } = splitBySelection(text, selection);
 
-  return before + Markers.BOLD_START + selected + Markers.BOLD_END + after;
+  // effectively no selection
+  if (selection.end - selection.start === 0) {
+    let prefix = '';
+    if (!before.endsWith(' ')) {
+      prefix += ' ';
+    }
+
+    return {
+      text: before + prefix + Markers.BOLD_START,
+      selection,
+    };
+  }
+
+  return {
+    text: before + Markers.BOLD_START + selected + Markers.BOLD_END + after,
+    selection,
+  };
 };
 
 function splitBySelection(
@@ -59,4 +81,9 @@ function splitBySelection(
   };
 }
 
-export { addHeadlineMarker, addBoldMarkers, splitBySelection };
+export {
+  addHeadlineMarker,
+  addBoldMarkers,
+  addBoldEndMarker,
+  splitBySelection,
+};
