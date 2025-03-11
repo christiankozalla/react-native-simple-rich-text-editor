@@ -1,6 +1,6 @@
 import { Markers } from '../internal/text-formats/unicode-markers-format/markers';
 import {
-  addBoldMarkers,
+  addFontStyleMarkers,
   splitBySelection,
 } from '../internal/text-formats/unicode-markers-format/text-manipulation';
 
@@ -9,9 +9,11 @@ it('inserts BOLD START and BOLD END markers for selection', () => {
   const selection = { start: 12, end: 43 };
   const expectedText = `Das ist das ${Markers.BOLD_START}13te Zeichen. Ende ist am 43ten${Markers.BOLD_END} Zeichen`;
 
-  const withBoldMarkers = addBoldMarkers(inputText, selection);
+  const { text: withBoldMarkers, selection: newSelection } =
+    addFontStyleMarkers(inputText, selection, 'bold');
 
   expect(withBoldMarkers).toBe(expectedText);
+  expect(newSelection).toEqual(selection);
 });
 
 describe('splitBySelection', () => {
