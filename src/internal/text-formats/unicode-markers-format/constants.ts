@@ -35,6 +35,14 @@ const ITALIC_MARKERS = {
   END: createMarker([ITALIC_MARKER_TYPE, ITALIC_MARKER_END]),
 } as const;
 
+const BULLET_POINT_MARKER_TYPE = 0x40;
+const BULLET_POINT_UNORDERED = 1;
+const BULLET_POINT_UL_MARKER = createMarker([
+  BULLET_POINT_MARKER_TYPE,
+  BULLET_POINT_UNORDERED,
+]);
+const BULLET_POINT_STRING_REPRESENTATION = '• ';
+
 function createMarker(data: number[], length = MARKER_BYTE_LENGTH) {
   const array = new Uint8Array(length);
   array.set(data);
@@ -51,4 +59,6 @@ export {
   BOLD_MARKER_TYPE,
   BOLD_MARKERS,
   ITALIC_MARKERS,
+  BULLET_POINT_UL_MARKER,
+  BULLET_POINT_STRING_REPRESENTATION,
 };

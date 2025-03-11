@@ -1,6 +1,33 @@
 import { Markers } from './markers';
 
 /**
+ * Adds a bullet point marker to the text at the current cursor position.
+ * If the cursor is not at the beginning of a line, a newline is added before the marker.
+ * If the cursor is at the beginning of a line, the marker is added directly.
+ */
+const addBulletPointMarker = (
+  text: string,
+  selection: { start: number; end: number }
+) => {
+  if (!text) {
+    return Markers.UL;
+  }
+
+  // Split text at the current selection.
+  const { before, selected, after } = splitBySelection(text, selection);
+
+  // Ensure that the marker begins on a new line.
+  let prefix = '';
+  if (before.length > 0 && !before.endsWith('\n')) {
+    prefix = '\n';
+  }
+
+  // Append the marker
+  const insertion = prefix + Markers.UL;
+  return before + insertion + selected + after;
+};
+
+/**
  * Inserts a headline start marker into the text at the current cursor position.
  * The marker encodes two bytes:
  *   - Byte 0: marker type (0x10 for headline)
@@ -100,6 +127,7 @@ function splitBySelection(
 }
 
 export {
+  addBulletPointMarker,
   addHeadlineMarker,
   addFontStyleMarkers,
   addFontStyleEndMarker,

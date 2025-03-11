@@ -44,6 +44,7 @@ import {
   addFontStyleMarkers,
   addFontStyleEndMarker,
   addHeadlineMarker,
+  addBulletPointMarker,
 } from './internal/text-formats/unicode-markers-format/text-manipulation.ts';
 import { Markers } from './internal/text-formats/unicode-markers-format/markers.ts';
 
@@ -105,11 +106,17 @@ const RichTextEditor = ({
           <Text style={styles.buttonText}>H3</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style={styles.button}
+          onPress={() => onEmitText(addBulletPointMarker(text, selection))}
+        >
+          <Text style={styles.buttonText}>List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={[styles.button, styles.fixedWidth]}
           onPress={handleFontStyleMarkerInsertion('bold')}
         >
           <Text style={styles.buttonText}>
-            {needsBoldEndMarker ? 'Bold End' : 'Bold'}
+            {needsBoldEndMarker ? 'Bold ✖' : 'Bold'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -117,7 +124,7 @@ const RichTextEditor = ({
           onPress={handleFontStyleMarkerInsertion('italic')}
         >
           <Text style={styles.buttonText}>
-            {needsItalicEndMarker ? 'Italic End' : 'Italic'}
+            {needsItalicEndMarker ? 'Italic ✖' : 'Italic'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -145,23 +152,25 @@ const styles = StyleSheet.create({
   row: {
     margin: 8,
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    flexWrap: 'nowrap',
   },
   input: { flex: 1, textAlignVertical: 'top' },
   button: {
     paddingVertical: 6,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: electricBlueHex,
     backgroundColor: 'white',
+    flexShrink: 1,
   },
   buttonText: {
     textAlign: 'center',
     color: electricBlueHex,
   },
   fixedWidth: {
-    width: 100,
+    width: 70,
   },
 });
 

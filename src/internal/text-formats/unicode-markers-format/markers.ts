@@ -4,6 +4,7 @@ import {
   HEADLINE_MARKERS,
   BOLD_MARKERS,
   ITALIC_MARKERS,
+  BULLET_POINT_UL_MARKER,
 } from './constants.ts';
 
 export const Markers = {
@@ -14,5 +15,5 @@ export const Markers = {
   BOLD_END: encode(ZWS, BOLD_MARKERS.END),
   ITALIC_START: encode(ZWS, ITALIC_MARKERS.START),
   ITALIC_END: encode(ZWS, ITALIC_MARKERS.END),
-  UL: encode(ZWS, new Uint8Array()), // TODO
+  UL: encode(ZWS, BULLET_POINT_UL_MARKER),
 } as const;

@@ -2,15 +2,21 @@ import { Text } from 'react-native';
 import {
   ZWS,
   MARKER_STRING_LENGTH,
+  BULLET_POINT_STRING_REPRESENTATION,
 } from '../../text-formats/unicode-markers-format/constants.ts';
 import { Headline } from './Headline.tsx';
 import { Bold } from './Bold.tsx';
 import { Markers } from '../../text-formats/unicode-markers-format/markers.ts';
 import { Fragment } from 'react/jsx-runtime';
 import { Italic } from './Italic.tsx';
+import { BulletPoint } from './BulletPoint.tsx';
+import { intersperse } from '../utils.ts';
 
 export const Render = ({ encodedText }: { encodedText: string }) => {
-  const lines = splitPreservingSeparator(encodedText, ZWS);
+  const lines = splitPreservingSeparator(
+    encodedText.replaceAll(BULLET_POINT_STRING_REPRESENTATION, ''),
+    ZWS
+  ); // each BulletPoint.tsx instance adds a BULLET_POINT_STRING_REPRESENTATION, we need to remove them to avoid adding extra chars on each render
 
   return lines.map((line, i) => {
     const marker = line.substring(0, MARKER_STRING_LENGTH);
@@ -24,6 +30,32 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
           <Fragment key={i + line}>
             <Headline level={marker}>{headline}</Headline>
             {restOfLineWithoutMarkers.join('')}
+          </Fragment>
+        );
+      case Markers.UL:
+        // NOTE: no other markers are allowed in a bullet point list for now..
+        // if there are other markers they will lead to a break out of the the list -> will make the list terminate early
+        const [bulletPoints, ...paragraphs] = splitPreservingSeparator(
+          line,
+          '\n\n'
+        );
+
+        return (
+          <Fragment key={i + line}>
+            {intersperse(
+              // adds newlines after split() operation
+              (bulletPoints ?? '')
+                .split('\n') // erases newlines
+                .map((bulletPointLine, j) => (
+                  <BulletPoint key={j + bulletPointLine}>
+                    {bulletPointLine}
+                  </BulletPoint>
+                )),
+              '\n'
+            )}
+            {paragraphs.map((p) => (
+              <Text key={p}>{p}</Text>
+            ))}
           </Fragment>
         );
       case Markers.BOLD_START:
