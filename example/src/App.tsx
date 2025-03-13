@@ -1,6 +1,8 @@
 import RichTextEditor from 'react-native-simple-rich-text-editor';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   const [markdownText, setMarkdownText] = useState(
@@ -8,16 +10,16 @@ export default function App() {
   ); // or with backticks ``
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
       <RichTextEditor text={markdownText} onEmitText={setMarkdownText} />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
 });

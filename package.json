@@ -38,7 +38,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-simple-rich-text-editor-example",
+    "example": "yarn workspace react-native-simple-rich-text-editor-example start",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
