@@ -1,6 +1,6 @@
 {
   "name": "react-native-simple-rich-text-editor",
-  "version": "0.1.0-beta.0",
+  "version": "0.1.0",
   "description": "A lean Rich Text Editor for React Native built upon TextInput outputting Markdown",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
