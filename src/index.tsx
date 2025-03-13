@@ -74,7 +74,7 @@ const RichTextEditor = ({
 }: {
   text: string;
   onEmitText: Dispatch<SetStateAction<string>>;
-  emitTextAfterMillisecondsOfInactivity: number;
+  emitTextAfterMillisecondsOfInactivity?: number;
 }) => {
   // Internal state to track the current text value
   const [internalText, setInternalText] = useState(externalText);
