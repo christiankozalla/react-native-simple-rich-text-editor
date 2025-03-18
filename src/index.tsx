@@ -173,19 +173,37 @@ const RichTextEditor = ({
           <Text style={styles.buttonText}>List</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, styles.fixedWidth]}
+          style={[
+            styles.button,
+            styles.fixedWidth,
+            needsBoldEndMarker ? styles.endFontStyleButton : null,
+          ]}
           onPress={handleFontStyleMarkerInsertion('bold')}
         >
-          <Text style={styles.buttonText}>
-            {needsBoldEndMarker ? 'Bold ✖' : 'Bold'}
+          <Text
+            style={[
+              styles.buttonText,
+              needsBoldEndMarker ? styles.endFontStyleText : null,
+            ]}
+          >
+            Bold
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, styles.fixedWidth]}
+          style={[
+            styles.button,
+            styles.fixedWidth,
+            needsItalicEndMarker ? styles.endFontStyleButton : null,
+          ]}
           onPress={handleFontStyleMarkerInsertion('italic')}
         >
-          <Text style={styles.buttonText}>
-            {needsItalicEndMarker ? 'Italic ✖' : 'Italic'}
+          <Text
+            style={[
+              styles.buttonText,
+              needsItalicEndMarker ? styles.endFontStyleText : null,
+            ]}
+          >
+            Italic
           </Text>
         </TouchableOpacity>
       </View>
@@ -206,6 +224,7 @@ const RichTextEditor = ({
 };
 
 const electricBlueHex = '#009DDC';
+const jasperRedHex = '#E03A3E';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -231,7 +250,13 @@ const styles = StyleSheet.create({
     color: electricBlueHex,
   },
   fixedWidth: {
-    width: 70,
+    width: 80,
+  },
+  endFontStyleButton: {
+    borderColor: jasperRedHex,
+  },
+  endFontStyleText: {
+    color: jasperRedHex,
   },
 });
 
