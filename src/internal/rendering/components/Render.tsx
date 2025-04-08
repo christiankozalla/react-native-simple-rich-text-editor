@@ -12,9 +12,14 @@ import { Italic } from './Italic.tsx';
 import { BulletPoint } from './BulletPoint.tsx';
 import { intersperse } from '../utils.ts';
 
+const bulletPointRegex = new RegExp(
+  BULLET_POINT_STRING_REPRESENTATION.trimEnd() + ' ?',
+  'g'
+); // matches the bullet point alone or the bullet point followed by a space
+
 export const Render = ({ encodedText }: { encodedText: string }) => {
   const lines = splitPreservingSeparator(
-    encodedText.replaceAll(BULLET_POINT_STRING_REPRESENTATION, ''),
+    encodedText.replaceAll(bulletPointRegex, ''),
     ZWS
   ); // each BulletPoint.tsx instance adds a BULLET_POINT_STRING_REPRESENTATION, we need to remove them to avoid adding extra chars on each render
 
