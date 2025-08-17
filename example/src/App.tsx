@@ -12,13 +12,18 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
-      <RichTextEditor text={markdownText} onEmitText={setMarkdownText} />
+      <RichTextEditor
+        text={markdownText}
+        onEmitText={setMarkdownText}
+        fontSize={22}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 32,
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 12,
