@@ -222,7 +222,7 @@ const RichTextEditor = ({
         multiline
         autoFocus
         autoCorrect={false}
-        style={[styles.input, textInputStyles]}
+        style={[styles.input, { fontSize }, textInputStyles]}
         onSelectionChange={(
           e: NativeSyntheticEvent<TextInputSelectionChangeEventData>
         ) => setSelection(e.nativeEvent.selection)}
