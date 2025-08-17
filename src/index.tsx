@@ -38,6 +38,9 @@ import {
   Text,
   type NativeSyntheticEvent,
   type TextInputSelectionChangeEventData,
+  type TextStyle,
+  type StyleProp,
+  type ViewStyle,
 } from 'react-native';
 import { Render } from './internal/rendering/components/Render.tsx';
 import {
@@ -71,10 +74,14 @@ const RichTextEditor = ({
   text: externalText,
   onEmitText,
   emitTextAfterMillisecondsOfInactivity = 500,
+  textInputStyles,
+  buttonStyles,
 }: {
   text: string;
   onEmitText: Dispatch<SetStateAction<string>>;
   emitTextAfterMillisecondsOfInactivity?: number;
+  textInputStyles?: StyleProp<TextStyle>;
+  buttonStyles?: StyleProp<ViewStyle>;
 }) => {
   // Internal state to track the current text value
   const [internalText, setInternalText] = useState(externalText);
@@ -135,7 +142,7 @@ const RichTextEditor = ({
     <View style={styles.container}>
       <View style={styles.toolbar}>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, buttonStyles]}
           onPress={() =>
             handleTextChange(
               addHeadlineMarker(Markers.H1, internalText, selection)
@@ -145,7 +152,7 @@ const RichTextEditor = ({
           <Text style={styles.buttonText}>H1</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, buttonStyles]}
           onPress={() =>
             handleTextChange(
               addHeadlineMarker(Markers.H2, internalText, selection)
@@ -155,7 +162,7 @@ const RichTextEditor = ({
           <Text style={styles.buttonText}>H2</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, buttonStyles]}
           onPress={() =>
             handleTextChange(
               addHeadlineMarker(Markers.H3, internalText, selection)
@@ -165,7 +172,7 @@ const RichTextEditor = ({
           <Text style={styles.buttonText}>H3</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, buttonStyles]}
           onPress={() =>
             handleTextChange(addBulletPointMarker(internalText, selection))
           }
@@ -176,6 +183,7 @@ const RichTextEditor = ({
           style={[
             styles.button,
             styles.fixedWidth,
+            buttonStyles,
             needsBoldEndMarker ? styles.endFontStyleButton : null,
           ]}
           onPress={handleFontStyleMarkerInsertion('bold')}
@@ -183,6 +191,7 @@ const RichTextEditor = ({
           <Text
             style={[
               styles.buttonText,
+              buttonStyles,
               needsBoldEndMarker ? styles.endFontStyleText : null,
             ]}
           >
@@ -193,6 +202,7 @@ const RichTextEditor = ({
           style={[
             styles.button,
             styles.fixedWidth,
+            buttonStyles,
             needsItalicEndMarker ? styles.endFontStyleButton : null,
           ]}
           onPress={handleFontStyleMarkerInsertion('italic')}
@@ -200,6 +210,7 @@ const RichTextEditor = ({
           <Text
             style={[
               styles.buttonText,
+              buttonStyles,
               needsItalicEndMarker ? styles.endFontStyleText : null,
             ]}
           >
@@ -211,7 +222,7 @@ const RichTextEditor = ({
         multiline
         autoFocus
         autoCorrect={false}
-        style={styles.input}
+        style={[styles.input, textInputStyles]}
         onSelectionChange={(
           e: NativeSyntheticEvent<TextInputSelectionChangeEventData>
         ) => setSelection(e.nativeEvent.selection)}
