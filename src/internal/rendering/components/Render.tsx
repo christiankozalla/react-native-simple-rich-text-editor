@@ -17,7 +17,13 @@ const bulletPointRegex = new RegExp(
   'g'
 ); // matches the bullet point alone or the bullet point followed by a space
 
-export const Render = ({ encodedText }: { encodedText: string }) => {
+export const Render = ({
+  encodedText,
+  fontSize,
+}: {
+  encodedText: string;
+  fontSize?: number;
+}) => {
   const lines = splitPreservingSeparator(
     encodedText.replaceAll(bulletPointRegex, ''),
     ZWS
@@ -33,7 +39,9 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
           splitPreservingSeparator(line, '\n');
         return (
           <Fragment key={i + line}>
-            <Headline level={marker}>{headline}</Headline>
+            <Headline level={marker} fontSize={fontSize}>
+              {headline}
+            </Headline>
             {restOfLineWithoutMarkers.join('')}
           </Fragment>
         );
@@ -52,14 +60,16 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
               (bulletPoints ?? '')
                 .split('\n') // erases newlines
                 .map((bulletPointLine, j) => (
-                  <BulletPoint key={j + bulletPointLine}>
+                  <BulletPoint key={j + bulletPointLine} fontSize={fontSize}>
                     {bulletPointLine}
                   </BulletPoint>
                 )),
               '\n'
             )}
             {paragraphs.map((p) => (
-              <Text key={p}>{p}</Text>
+              <Text key={p} style={{ fontSize }}>
+                {p}
+              </Text>
             ))}
           </Fragment>
         );
@@ -67,11 +77,19 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
         // NOTE: We could check if lines[i+1] starts with a BOLD_END marker
         // but for now I opt for this simpler solution.
         // Because of the above: There must not be any other markers between Markers.BOLD_START and Markers.BOLD_END!
-        return <Bold key={i + line}>{line}</Bold>;
+        return (
+          <Bold key={i + line} fontSize={fontSize}>
+            {line}
+          </Bold>
+        );
       case Markers.BOLD_END:
         break;
       case Markers.ITALIC_START:
-        return <Italic key={i + line}>{line}</Italic>;
+        return (
+          <Italic key={i + line} fontSize={fontSize}>
+            {line}
+          </Italic>
+        );
       case Markers.ITALIC_END:
         break;
       default:
@@ -87,7 +105,11 @@ export const Render = ({ encodedText }: { encodedText: string }) => {
         break;
     }
 
-    return <Text key={i + line}>{line}</Text>;
+    return (
+      <Text key={i + line} style={{ fontSize }}>
+        {line}
+      </Text>
+    );
   });
 };
 

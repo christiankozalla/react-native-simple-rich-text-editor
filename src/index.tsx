@@ -76,12 +76,14 @@ const RichTextEditor = ({
   emitTextAfterMillisecondsOfInactivity = 500,
   textInputStyles,
   buttonStyles,
+  fontSize,
 }: {
   text: string;
   onEmitText: Dispatch<SetStateAction<string>>;
   emitTextAfterMillisecondsOfInactivity?: number;
   textInputStyles?: StyleProp<TextStyle>;
   buttonStyles?: StyleProp<ViewStyle>;
+  fontSize?: number;
 }) => {
   // Internal state to track the current text value
   const [internalText, setInternalText] = useState(externalText);
@@ -191,7 +193,6 @@ const RichTextEditor = ({
           <Text
             style={[
               styles.buttonText,
-              buttonStyles,
               needsBoldEndMarker ? styles.endFontStyleText : null,
             ]}
           >
@@ -210,7 +211,6 @@ const RichTextEditor = ({
           <Text
             style={[
               styles.buttonText,
-              buttonStyles,
               needsItalicEndMarker ? styles.endFontStyleText : null,
             ]}
           >
@@ -228,7 +228,7 @@ const RichTextEditor = ({
         ) => setSelection(e.nativeEvent.selection)}
         onChangeText={handleTextChange}
       >
-        <Render encodedText={internalText} />
+        <Render encodedText={internalText} fontSize={fontSize} />
       </TextInput>
     </View>
   );

@@ -1,15 +1,24 @@
 import { type PropsWithChildren } from 'react';
-import { type TextStyle, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { Markers } from '../../text-formats/unicode-markers-format/markers.ts';
 
 export const Headline = ({
   level,
+  fontSize = 14,
   children,
 }: PropsWithChildren<{
   level: keyof typeof styles;
+  fontSize?: number;
 }>) => {
   return (
-    <Text style={(styles[level] as TextStyle) ?? styles[3]}>{children}</Text>
+    <Text
+      style={[
+        styles[level] ?? styles[3],
+        { fontSize: (styles[level]?.fontSize ?? 18) * (fontSize / 14) },
+      ]}
+    >
+      {children}
+    </Text>
   );
 };
 
